@@ -1,4 +1,5 @@
 const fs = require('fs');
+const Movie = require('../Models/movieModel');
 
 const movies = JSON.parse(fs.readFileSync('./data/movies.json'));
 
