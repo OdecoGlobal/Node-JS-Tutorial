@@ -17,6 +17,12 @@ mongoose
     console.error(`some error has occured :${err}`);
   });
 
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log('server has started');
+});
+
+/* 
 // // Creating a document from a model
 // const testMovie = new Movie({
 //   name: 'Die Had',
@@ -30,8 +36,4 @@ mongoose
 //   .save()
 //   .then(doc => console.log(doc))
 //   .catch(err => console.error(`Error occured ${err}`));
-
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log('server has started');
-});
+*/

@@ -1,10 +1,120 @@
-const fs = require('fs');
 const Movie = require('../Models/movieModel');
 
-const movies = JSON.parse(fs.readFileSync('./data/movies.json'));
+// WORKING WITHH MONGODB
 
+exports.getAllMovies = async (req, res) => {
+  try {
+    const movies = await Movie.find();
+
+    res.status(200).json({
+      status: 'success',
+      count: movies.length,
+      data: {
+        movies,
+      },
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: 'fail',
+      message: err.message,
+    });
+  }
+};
+
+exports.getMovie = async (req, res) => {
+  // const movie = await Movie.find({_id: req.params.id })
+
+  try {
+    const movie = await Movie.findById(req.params.id);
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        movie,
+      },
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: 'fail',
+      message: err.message,
+    });
+  }
+};
+
+exports.createMovie = async (req, res) => {
+  try {
+    const movie = await Movie.create(req.body);
+    res.status(201).json({
+      status: 'success',
+      data: {
+        movie,
+      },
+    });
+    // const docs = console.log(docs)
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: err.message,
+    });
+  }
+};
+
+exports.updateMovie = async (req, res) => {
+  try {
+    const updatedMovie = await Movie.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        movie: updatedMovie,
+      },
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: 'fail',
+      message: err.message,
+    });
+  }
+};
+
+exports.deleteMovie = async (req, res) => {
+  try {
+    await Movie.findByIdAndDelete(req.params.id);
+    res.status(204).json({
+      status: 'success',
+      data: null,
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: 'fail',
+      message: err.message,
+    });
+  }
+};
+
+/* 
+WORKING WITH JSON DATA
+
+const fs = require('fs');
+const movies = JSON.parse(fs.readFileSync('./data/movies.json'));
+ CHECKING ID
 exports.checkId = (req, res, next, value) => {
   console.log(`Movie id is ${value}`);
+
+VALIDATING MOVIE JSON
+  exports.validateBody = (req, res, next) => {
+  if (!req.body.name || !req.body.releaseYear) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Not a valid movie data',
+    });
+  }
+  next();
+};
 
   const movie = movies.find(mov => mov.id === +value);
   if (!movie) {
@@ -14,16 +124,6 @@ exports.checkId = (req, res, next, value) => {
     });
   }
 
-  next();
-};
-
-exports.validateBody = (req, res, next) => {
-  if (!req.body.name || !req.body.releaseYear) {
-    return res.status(400).json({
-      status: 'fail',
-      message: 'Not a valid movie data',
-    });
-  }
   next();
 };
 
@@ -110,3 +210,4 @@ exports.deleteMovie = (req, res) => {
     });
   });
 };
+*/
